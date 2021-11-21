@@ -1,18 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="host.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="local.settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
+		<PackageReference Include="Microsoft.Playwright" Version="1.17.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="host.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="local.settings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+
+	<Target Name="MovePlaywrightFilesToOutputBin" AfterTargets="CopyPlaywrightFilesToOutput">
+		<Move SourceFiles="@(_CopyItems->'$(OutDir)\.playwright\%(RecursiveDir)%(Filename)%(Extension)')" DestinationFiles="@(_CopyItems->'$(OutDir)\bin\.playwright\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<RemoveDir Directories="$(OutDir).playwright" />
+	</Target>
+
+	<Target Name="MovePlaywrightShellToOutputBin" AfterTargets="CopyPlaywrightShellToOutput">
+		<Move SourceFiles="@(_CopyItemsShell->'$(OutDir)\%(RecursiveDir)%(Filename)%(Extension)')" DestinationFiles="@(_CopyItemsShell->'$(OutDir)\bin\%(RecursiveDir)%(Filename)%(Extension)')" />
+	</Target>
+
+	<Target Name="PlaywrightMoveToBinAfterPublish" AfterTargets="PlaywrightCopyAfterPublish">
+		<Message Text="@(_PublishCopyItems)" Importance="high" />
+		<Move SourceFiles="@(_PublishCopyItems->'$(PublishDir)\.playwright\%(RecursiveDir)%(Filename)%(Extension)')" DestinationFiles="@(_PublishCopyItems->'$(PublishDir)\bin\.playwright\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<RemoveDir Directories="$(PublishDir).playwright" />
+	</Target>
 </Project>
