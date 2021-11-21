@@ -17,9 +17,9 @@ namespace AzureFunctionsPlaywrightDeploymentTest
                 playwrightMessage = "playwright install worked";
 
             }
-            catch (Microsoft.Playwright.PlaywrightException ex)
+            catch (Exception ex)
             {
-                playwrightMessage = $"PlaywrightException: {ex.Message}";
+                playwrightMessage = ex.ToString();
             }
 
             var appBinFolder = System.IO.Path.GetDirectoryName(typeof(Startup).Assembly.Location);
