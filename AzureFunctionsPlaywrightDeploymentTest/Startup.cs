@@ -1,5 +1,8 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using AzureFunctionsPlaywrightDeploymentTest;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using System;
+
+[assembly: FunctionsStartup(typeof(Startup))]
 
 namespace AzureFunctionsPlaywrightDeploymentTest
 {
