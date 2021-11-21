@@ -55,6 +55,5 @@ jobs:
         id: fa
         with:
           app-name: '{{ env.FUNCTIONS_APP_NAME }}'
-          slot-name: 'Production'
           package: './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output.zip'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
